@@ -14,20 +14,26 @@ Sinh viên đại học, ban quản lý câu lạc bộ, và các nhóm trong tr
 
 ## Demo Trực Tiếp
 - **Mạng**: Stellar Testnet
-- **Contract ID**: `CABC123...`
-- **Giao dịch**: https://stellar.expert/explorer/testnet/tx/YOUR_TX_HASH
+- **Contract ID**: `CD3V47XRHSQKM64TUHKMD6TIJM62UMSEDCAFSKKTACOFO5WUGHBFUYD7`
+- **Giao dịch**: https://stellar.expert/explorer/testnet/tx/85a8eb1367cbeb91c440c80c5d2362371222d01174690d893922b765ff6acc4f
 
 ## Cách Chạy
-1. Clone: `git clone https://github.com/yourname/project.git`
-2. Build: `cd contracts/my-project && stellar contract build`
-3. Test: `cargo test`
-4. Deploy: `stellar contract deploy --wasm target/wasm32-unknown-unknown/release/my_project.wasm --source-account student --network testnet`
-5. Frontend: `cd frontend && npx serve .`
+1. Clone repo: `git clone https://github.com/phatnguyen246/soroban-bootcamp.git`
+2. Vào project: `cd soroban-bootcamp`
+3. Build contract: `cd contracts/my-project && stellar contract build`
+4. Chạy test contract: `cargo test`
+5. Quay về root project: `cd ../..`
+6. Chạy frontend bằng static server: `python3 -m http.server 8000`
+7. Mở trình duyệt tại: `http://localhost:8000/frontend/`
+8. Kết nối Freighter ở mạng Testnet và nhập `Contract ID` để bắt đầu tương tác
+
+> Nếu không có `python3`, bạn có thể chạy frontend bằng `npx serve .` từ thư mục root rồi mở `/frontend/`.
 
 ## Tech Stack
-- Smart Contract: Rust / Soroban SDK v22
-- Frontend: HTML / JavaScript / `@stellar/stellar-sdk`
-- Wallet: Freighter
+- Smart Contract: Rust 2021 / Soroban SDK v22
+- Frontend: HTML / CSS / JavaScript thuần trong một file `frontend/index.html`
+- Blockchain SDK: `@stellar/stellar-sdk` tải qua CDN
+- Wallet Integration: Freighter Wallet API tải qua browser CDN
 - Mạng: Stellar Testnet
 
 ## Cấu Trúc Repo
@@ -36,4 +42,4 @@ Sinh viên đại học, ban quản lý câu lạc bộ, và các nhóm trong tr
 - `frontend/README.md`: hướng dẫn sử dụng frontend chi tiết
 
 ## Nhóm
-- [Tên Bạn] | [@telegram] | [email] | [trường + năm]
+- Phat Nguyen | 0962856613 | phatnguyenac02@gmail.com | Greenwich + 2026
