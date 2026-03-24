@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campus Coin | Stellar Testnet dApp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #07131b;
+      --bg-soft: #0c1c28;
+      --panel: rgba(9, 24, 34, 0.82);
+      --panel-strong: rgba(10, 28, 39, 0.96);
+      --panel-alt: rgba(16, 39, 54, 0.85);
+      --border: rgba(142, 197, 252, 0.14);
+      --border-strong: rgba(142, 197, 252, 0.24);
+      --text: #effafc;
+      --muted: #8fb4c2;
+      --accent: #4dd0c8;
+      --accent-strong: #1fb7ac;
+      --accent-soft: rgba(77, 208, 200, 0.14);
+      --highlight: #ffb454;
+      --danger: #ff8b8b;
+      --danger-soft: rgba(255, 139, 139, 0.12);
+      --success: #78f2af;
+      --success-soft: rgba(120, 242, 175, 0.12);
+      --warning-soft: rgba(255, 180, 84, 0.14);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(77, 208, 200, 0.18), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(255, 180, 84, 0.14), transparent 20%),
+        radial-gradient(circle at 50% 100%, rgba(20, 97, 108, 0.24), transparent 24%),
+        linear-gradient(180deg, #041017 0%, #07131b 46%, #051018 100%);
+      background-attachment: fixed;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(circle at center, rgba(0,0,0,0.85), transparent 80%);
+      opacity: 0.35;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .page {
+      width: min(1220px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      position: sticky;
+      top: 16px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 24px;
+      padding: 18px 20px;
+      border-radius: 26px;
+      border: 1px solid var(--border);
+      background: rgba(4, 18, 27, 0.82);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .hero-badge {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: #072028;
+      background:
+        linear-gradient(135deg, #9ff7eb 0%, #4dd0c8 58%, #ffc978 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.24), 0 16px 40px rgba(77, 208, 200, 0.2);
+    }
+
+    .hero-copy h1 {
+      margin: 0;
+      font-size: 1.28rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-copy p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 0.94rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .hero-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      max-width: min(100%, 320px);
+      padding: 10px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(143, 180, 194, 0.14);
+      background: rgba(143, 180, 194, 0.08);
+    }
+
+    .hero-status-copy {
+      min-width: 0;
+    }
+
+    .hero-status-label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .hero-status-value {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #dff8f5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .status-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      flex: 0 0 auto;
+      background: rgba(255, 139, 139, 0.9);
+      box-shadow: 0 0 18px rgba(255, 139, 139, 0.35);
+    }
+
+    .status-dot.connected {
+      background: rgba(120, 242, 175, 0.95);
+      box-shadow: 0 0 18px rgba(120, 242, 175, 0.4);
+    }
+
+    .network-chip,
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      border: 1px solid var(--border);
+      background: rgba(143, 180, 194, 0.09);
+      color: #d7f5f1;
+    }
+
+    .network-chip::before,
+    .pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 16px rgba(77, 208, 200, 0.7);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+      gap: 20px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 20px;
+    }
+
+    .card {
+      padding: 22px;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(10, 28, 39, 0.98), rgba(10, 28, 39, 0.82));
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(255,255,255,0.03), transparent 26%);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 1.02rem;
+      letter-spacing: -0.02em;
+    }
+
+    .card-subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.92rem;
+    }
+
+    .lead {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .btn {
+      cursor: pointer;
+      border: 0;
+      border-radius: 16px;
+      padding: 12px 18px;
+      font-weight: 700;
+      transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      color: var(--text);
+      min-height: 48px;
+    }
+
+    .btn:hover:not(:disabled) { transform: translateY(-1px); }
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.58;
+    }
+
+    .btn-primary {
+      color: #032128;
+      background: linear-gradient(135deg, #9ff7eb 0%, #4dd0c8 100%);
+      box-shadow: 0 14px 30px rgba(77, 208, 200, 0.18);
+    }
+
+    .btn-secondary {
+      background: rgba(143, 180, 194, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    .btn-warning {
+      background: linear-gradient(135deg, #ffd195 0%, #ffb454 100%);
+      color: #342106;
+      box-shadow: 0 14px 30px rgba(255, 180, 84, 0.18);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #a2f7c4 0%, #55d88f 100%);
+      color: #0b2918;
+      box-shadow: 0 14px 30px rgba(85, 216, 143, 0.16);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px dashed var(--border-strong);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group.full { grid-column: 1 / -1; }
+
+    .label {
+      display: block;
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-bottom: 6px;
+    }
+
+    .form-group label {
+      color: #d8edf3;
+      font-size: 0.88rem;
+    }
+
+    input {
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid rgba(143, 180, 194, 0.18);
+      background: rgba(6, 18, 26, 0.86);
+      color: var(--text);
+      padding: 13px 14px;
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    input::placeholder {
+      color: #638291;
+    }
+
+    input:focus {
+      border-color: rgba(77, 208, 200, 0.55);
+      box-shadow: 0 0 0 4px rgba(77, 208, 200, 0.12);
+      background: rgba(8, 22, 31, 0.95);
+    }
+
+    .action-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .meta-grid,
+    .status-grid {
+      display: grid;
+      gap: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .meta-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .status-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .metric {
+      padding: 15px;
+      border-radius: 18px;
+      border: 1px solid rgba(143, 180, 194, 0.12);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .metric .value {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .metric .hint {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .status-table {
+      width: 100%;
+      border-collapse: collapse;
+      position: relative;
+      z-index: 1;
+    }
+
+    .status-table th,
+    .status-table td {
+      padding: 12px 10px;
+      text-align: left;
+      font-size: 0.92rem;
+      border-bottom: 1px solid rgba(143, 180, 194, 0.1);
+      vertical-align: top;
+    }
+
+    .status-table th {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .status-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .mono {
+      font-family: "JetBrains Mono", "SFMono-Regular", monospace;
+      word-break: break-all;
+      font-size: 0.85rem;
+    }
+
+    .tx-box {
+      display: grid;
+      gap: 12px;
+      min-height: 176px;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px dashed rgba(143, 180, 194, 0.24);
+      background:
+        linear-gradient(180deg, rgba(6, 18, 26, 0.9), rgba(9, 24, 34, 0.72));
+      position: relative;
+      z-index: 1;
+    }
+
+    .tx-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      border: 1px solid var(--border);
+      background: rgba(143, 180, 194, 0.08);
+    }
+
+    .tx-status.pending {
+      background: var(--warning-soft);
+      color: #ffd79e;
+      border-color: rgba(255, 180, 84, 0.26);
+    }
+
+    .tx-status.success {
+      background: var(--success-soft);
+      color: #c6fad9;
+      border-color: rgba(120, 242, 175, 0.28);
+    }
+
+    .tx-status.error {
+      background: var(--danger-soft);
+      color: #ffd0d0;
+      border-color: rgba(255, 139, 139, 0.28);
+    }
+
+    .inline-note {
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(143, 180, 194, 0.1);
+      background: rgba(143, 180, 194, 0.06);
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.9rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .alert {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      position: relative;
+      z-index: 1;
+    }
+
+    .alert.show { display: block; }
+    .alert.success {
+      background: var(--success-soft);
+      color: #d5fae4;
+      border: 1px solid rgba(120, 242, 175, 0.24);
+    }
+    .alert.error {
+      background: var(--danger-soft);
+      color: #ffd5d5;
+      border: 1px solid rgba(255, 139, 139, 0.24);
+    }
+    .alert.info {
+      background: rgba(77, 208, 200, 0.09);
+      color: #d4fcf8;
+      border: 1px solid rgba(77, 208, 200, 0.22);
+    }
+
+    .activity-list {
+      display: grid;
+      gap: 10px;
+      max-height: 380px;
+      overflow: auto;
+      padding-right: 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .activity-item {
+      padding: 13px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(143, 180, 194, 0.12);
+      background: rgba(143, 180, 194, 0.06);
+    }
+
+    .activity-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .activity-kind {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 6px 10px;
+      background: rgba(77, 208, 200, 0.12);
+      color: #d8fff9;
+      border: 1px solid rgba(77, 208, 200, 0.2);
+    }
+
+    .activity-kind.error {
+      background: rgba(255, 139, 139, 0.12);
+      color: #ffd5d5;
+      border-color: rgba(255, 139, 139, 0.22);
+    }
+
+    .activity-meta {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+
+    .tiny {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.89rem;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 1040px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        width: min(100% - 20px, 1220px);
+      }
+
+      .hero {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .hero-actions {
+        justify-content: stretch;
+      }
+
+      .hero-actions .btn {
+        width: 100%;
+      }
+
+      .meta-grid,
+      .status-grid,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .action-row .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="hero-brand">
+        <div class="hero-badge">CC</div>
+        <div class="hero-copy">
+          <h1>Campus Coin</h1>
+          <p>dApp thanh toán credit nội bộ minh bạch, gần như tức thì cho sinh viên trên Stellar Testnet.</p>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <span class="network-chip">Testnet</span>
+        <div class="hero-status" aria-live="polite">
+          <span class="status-dot" id="walletStatusDot"></span>
+          <div class="hero-status-copy">
+            <span class="hero-status-label">Wallet Status</span>
+            <span class="hero-status-value mono" id="walletStatusText">Disconnected</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="connectWalletBtn">Kết nối Freighter</button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="stack">
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Cấu hình contract</h2>
+              <p class="card-subtitle">Dán `Contract ID` đã deploy trên Stellar Testnet rồi đồng bộ metadata thực từ Soroban RPC.</p>
+            </div>
+            <span class="pill">Live Config</span>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group full">
+              <label for="contractId">Contract ID</label>
+              <input id="contractId" placeholder="CXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" />
+            </div>
+            <div class="form-group">
+              <label for="rpcUrl">RPC URL</label>
+              <input id="rpcUrl" value="https://soroban-testnet.stellar.org" readonly />
+            </div>
+            <div class="form-group">
+              <label for="networkName">Network</label>
+              <input id="networkName" value="Stellar Testnet" readonly />
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button class="btn btn-secondary" id="saveConfigBtn">Lưu cấu hình</button>
+            <button class="btn btn-primary" id="refreshOverviewBtn">Refresh Metadata</button>
+          </div>
+
+          <div class="alert info show" id="configAlert">
+            Contract hiện tại không expose `admin()`, nên UI chỉ có thể hiển thị admin theo dữ liệu bạn khởi tạo từ trình này hoặc lưu cục bộ.
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Tổng quan token</h2>
+              <p class="card-subtitle">Thông tin dưới đây được đọc trực tiếp từ contract qua các hàm `name()`, `symbol()`, `total_supply()` và `balance(address)`.</p>
+            </div>
+            <span class="pill">On-chain Overview</span>
+          </div>
+
+          <div class="meta-grid">
+            <div class="metric">
+              <span class="label">Tên token</span>
+              <div class="value" id="tokenNameDisplay">Chưa đọc</div>
+              <div class="hint">Lấy từ `name()`</div>
+            </div>
+            <div class="metric">
+              <span class="label">Ký hiệu token</span>
+              <div class="value" id="tokenSymbolDisplay">-</div>
+              <div class="hint">Lấy từ `symbol()`</div>
+            </div>
+            <div class="metric">
+              <span class="label">Tổng cung</span>
+              <div class="value" id="totalSupplyDisplay">-</div>
+              <div class="hint">Lấy từ `total_supply()`</div>
+            </div>
+          </div>
+
+          <div class="inline-note" id="overviewHint">
+            Chưa có dữ liệu on-chain. Hãy kết nối ví, nhập contract ID rồi bấm <strong>Refresh Metadata</strong>.
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Admin actions</h2>
+              <p class="card-subtitle">Ví kết nối phải là admin để khởi tạo token hoặc mint credit. Với ABI hiện tại, `initialize` không nhận tổng cung ban đầu.</p>
+            </div>
+            <span class="pill">Admin Flow</span>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="adminAddress">Admin address</label>
+              <input id="adminAddress" placeholder="Để trống để dùng ví đang kết nối" />
+            </div>
+            <div class="form-group">
+              <label for="tokenName">Token name</label>
+              <input id="tokenName" value="Campus Coin" placeholder="Campus Coin" />
+            </div>
+            <div class="form-group">
+              <label for="tokenSymbol">Token symbol</label>
+              <input id="tokenSymbol" value="CCN" placeholder="CCN" />
+            </div>
+            <div class="form-group">
+              <label for="mintTo">Mint to</label>
+              <input id="mintTo" placeholder="G..." />
+            </div>
+            <div class="form-group full">
+              <label for="mintAmount">Mint amount</label>
+              <input id="mintAmount" type="number" min="1" step="1" placeholder="100" />
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button class="btn btn-warning" id="initializeBtn">Initialize Token</button>
+            <button class="btn btn-success" id="mintBtn">Mint Token</button>
+          </div>
+
+          <div class="alert" id="adminAlert"></div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Student transfer</h2>
+              <p class="card-subtitle">Transfer luôn dùng địa chỉ ví đang kết nối làm `from`. UI sẽ kiểm tra balance hiện tại trước khi gửi giao dịch.</p>
+            </div>
+            <span class="pill">Student Flow</span>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="transferFrom">From wallet</label>
+              <input id="transferFrom" placeholder="Kết nối ví để tự điền" readonly />
+            </div>
+            <div class="form-group">
+              <label for="transferTo">To address</label>
+              <input id="transferTo" placeholder="G..." />
+            </div>
+            <div class="form-group full">
+              <label for="transferAmount">Amount</label>
+              <input id="transferAmount" type="number" min="1" step="1" placeholder="50" />
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button class="btn btn-secondary" id="checkBalanceBtn">Check Balance</button>
+            <button class="btn btn-primary" id="transferBtn">Transfer Token</button>
+          </div>
+
+          <div class="alert" id="transferAlert"></div>
+        </article>
+      </section>
+
+      <aside class="stack">
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Wallet state</h2>
+              <p class="card-subtitle">Trạng thái runtime của UI và dữ liệu đã sync từ contract hiện tại.</p>
+            </div>
+            <span class="pill">Runtime State</span>
+          </div>
+
+          <table class="status-table">
+            <thead>
+              <tr>
+                <th>Thuộc tính</th>
+                <th>Giá trị</th>
+              </tr>
+            </thead>
+            <tbody id="walletTableBody"></tbody>
+          </table>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Transaction result</h2>
+              <p class="card-subtitle">Hash, trạng thái và link explorer của giao dịch mới nhất.</p>
+            </div>
+            <span class="pill">Tx Monitor</span>
+          </div>
+
+          <div class="tx-box">
+            <span class="label">Trạng thái</span>
+            <div class="tx-status" id="txStatusChip">idle</div>
+
+            <span class="label">Transaction hash</span>
+            <div class="mono" id="txHashOutput">Chưa có giao dịch.</div>
+
+            <span class="label">Explorer</span>
+            <a class="tiny mono" id="txExplorerLink" href="#" target="_blank" rel="noreferrer noopener">Chưa có link</a>
+
+            <span class="label">Mô tả</span>
+            <div class="tiny" id="txMessageOutput">Đang chờ thao tác từ người dùng.</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Activity log</h2>
+              <p class="card-subtitle">Nhật ký phía client cho các thao tác refresh, initialize, mint và transfer.</p>
+            </div>
+            <span class="pill">Client Log</span>
+          </div>
+
+          <div class="activity-list" id="activityList"></div>
+        </article>
+      </aside>
+    </main>
+
+    <p class="footer-note">
+      UI này kết nối thật với Freighter và Soroban Testnet cho ABI `MyToken`. Do contract hiện tại không có hàm đọc admin, phần “admin hiện tại” trong bảng trạng thái là giá trị suy ra hoặc lưu cục bộ theo contract ID.
+    </p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-freighter-api/6.0.1/index.min.js"></script>
+  <script type="module">
+    import * as StellarSdk from "https://esm.sh/@stellar/stellar-sdk";
+
+    const NETWORK = {
+      name: "testnet",
+      rpcUrl: "https://soroban-testnet.stellar.org",
+      passphrase: "Test SDF Network ; September 2015",
+      explorerUrl: "https://stellar.expert/explorer/testnet",
+    };
+
+    const STORAGE_KEYS = {
+      contractId: "campus-coin.contract-id",
+      adminHints: "campus-coin.admin-hints",
+    };
+
+    const state = {
+      connectedWallet: "",
+      contractId: localStorage.getItem(STORAGE_KEYS.contractId) || "",
+      adminHints: loadAdminHints(),
+      tokenMeta: {
+        admin: "",
+        name: "",
+        symbol: "",
+        totalSupply: null,
+        walletBalance: null,
+      },
+      uiLog: [],
+      latestTx: {
+        status: "idle",
+        hash: "",
+        message: "Đang chờ thao tác từ người dùng.",
+      },
+      isBusy: false,
+    };
+
+    const freighterApi = window.freighterApi;
+
+    const dom = {
+      contractId: document.getElementById("contractId"),
+      connectWalletBtn: document.getElementById("connectWalletBtn"),
+      walletStatusDot: document.getElementById("walletStatusDot"),
+      walletStatusText: document.getElementById("walletStatusText"),
+      refreshOverviewBtn: document.getElementById("refreshOverviewBtn"),
+      saveConfigBtn: document.getElementById("saveConfigBtn"),
+      tokenNameDisplay: document.getElementById("tokenNameDisplay"),
+      tokenSymbolDisplay: document.getElementById("tokenSymbolDisplay"),
+      totalSupplyDisplay: document.getElementById("totalSupplyDisplay"),
+      overviewHint: document.getElementById("overviewHint"),
+      adminAddress: document.getElementById("adminAddress"),
+      tokenName: document.getElementById("tokenName"),
+      tokenSymbol: document.getElementById("tokenSymbol"),
+      mintTo: document.getElementById("mintTo"),
+      mintAmount: document.getElementById("mintAmount"),
+      mintBtn: document.getElementById("mintBtn"),
+      initializeBtn: document.getElementById("initializeBtn"),
+      adminAlert: document.getElementById("adminAlert"),
+      transferFrom: document.getElementById("transferFrom"),
+      transferTo: document.getElementById("transferTo"),
+      transferAmount: document.getElementById("transferAmount"),
+      transferAlert: document.getElementById("transferAlert"),
+      transferBtn: document.getElementById("transferBtn"),
+      checkBalanceBtn: document.getElementById("checkBalanceBtn"),
+      walletTableBody: document.getElementById("walletTableBody"),
+      txStatusChip: document.getElementById("txStatusChip"),
+      txHashOutput: document.getElementById("txHashOutput"),
+      txExplorerLink: document.getElementById("txExplorerLink"),
+      txMessageOutput: document.getElementById("txMessageOutput"),
+      activityList: document.getElementById("activityList"),
+    };
+
+    dom.contractId.value = state.contractId;
+
+    function loadAdminHints() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.adminHints) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function persistContractId() {
+      localStorage.setItem(STORAGE_KEYS.contractId, state.contractId);
+    }
+
+    function persistAdminHint(contractId, admin) {
+      if (!contractId || !admin) return;
+      state.adminHints[contractId] = admin;
+      localStorage.setItem(STORAGE_KEYS.adminHints, JSON.stringify(state.adminHints));
+    }
+
+    function getAdminHint() {
+      return state.adminHints[state.contractId] || "";
+    }
+
+    function shortAddress(address) {
+      if (!address) return "Chưa có";
+      return address.length > 18 ? `${address.slice(0, 6)}...${address.slice(-6)}` : address;
+    }
+
+    function formatAmount(value) {
+      if (value === null || value === undefined || value === "") return "-";
+      try {
+        return Number(value).toLocaleString("en-US");
+      } catch {
+        return String(value);
+      }
+    }
+
+    function now() {
+      return new Date().toLocaleString("vi-VN");
+    }
+
+    function createExplorerTxUrl(hash) {
+      return hash ? `${NETWORK.explorerUrl}/tx/${hash}` : "#";
+    }
+
+    function normalizeError(error) {
+      if (!error) return "Lỗi không xác định.";
+      if (typeof error === "string") return error;
+      if (error.message) return error.message;
+      if (typeof error === "object" && error !== null && "message" in error) {
+        return String(error.message);
+      }
+      try {
+        return JSON.stringify(error);
+      } catch {
+        return String(error);
+      }
+    }
+
+    function setBusy(nextBusy) {
+      state.isBusy = nextBusy;
+      const disabled = nextBusy;
+      [
+        dom.connectWalletBtn,
+        dom.refreshOverviewBtn,
+        dom.saveConfigBtn,
+        dom.mintBtn,
+        dom.initializeBtn,
+        dom.transferBtn,
+        dom.checkBalanceBtn,
+      ].forEach((button) => {
+        button.disabled = disabled;
+      });
+      dom.connectWalletBtn.textContent = nextBusy
+        ? "Đang xử lý..."
+        : state.connectedWallet
+          ? `Ví ${shortAddress(state.connectedWallet)}`
+          : "Kết nối Freighter";
+    }
+
+    function showAlert(element, message, type = "info") {
+      element.textContent = message;
+      element.className = `alert show ${type}`;
+    }
+
+    function clearAlert(element) {
+      element.textContent = "";
+      element.className = "alert";
+    }
+
+    function pushLog(kind, title, detail, status = "success", hash = "") {
+      state.uiLog.push({
+        kind,
+        title,
+        detail,
+        status,
+        hash,
+        time: now(),
+      });
+      renderActivityLog();
+    }
+
+    function setLatestTx(status, message, hash = "") {
+      state.latestTx = { status, message, hash };
+      renderLatestTx();
+    }
+
+    function renderLatestTx() {
+      const { status, message, hash } = state.latestTx;
+      dom.txStatusChip.textContent = status;
+      dom.txStatusChip.className = `tx-status ${status === "pending" ? "pending" : status === "success" ? "success" : status === "error" ? "error" : ""}`;
+      dom.txHashOutput.textContent = hash || "Chưa có giao dịch.";
+      dom.txMessageOutput.textContent = message;
+
+      if (hash) {
+        const href = createExplorerTxUrl(hash);
+        dom.txExplorerLink.textContent = href;
+        dom.txExplorerLink.href = href;
+      } else {
+        dom.txExplorerLink.textContent = "Chưa có link";
+        dom.txExplorerLink.href = "#";
+      }
+    }
+
+    function renderWalletTable() {
+      const rows = [
+        { key: "Ví đã kết nối", value: state.connectedWallet || "Chưa kết nối", mono: true },
+        {
+          key: "Admin hiện tại",
+          value: state.tokenMeta.admin || "Không đọc được từ ABI hiện tại",
+          mono: !!state.tokenMeta.admin,
+        },
+        {
+          key: "Số dư ví kết nối",
+          value: state.tokenMeta.walletBalance === null
+            ? "Chưa đồng bộ"
+            : `${formatAmount(state.tokenMeta.walletBalance)} ${state.tokenMeta.symbol || ""}`.trim(),
+          mono: false,
+        },
+        { key: "Contract ID", value: state.contractId || "Chưa cấu hình", mono: true },
+      ];
+
+      dom.walletTableBody.innerHTML = rows.map((row) => `
+        <tr>
+          <td>${row.key}</td>
+          <td class="${row.mono ? "mono" : ""}">${row.value}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderOverview() {
+      dom.tokenNameDisplay.textContent = state.tokenMeta.name || "Chưa đọc";
+      dom.tokenSymbolDisplay.textContent = state.tokenMeta.symbol || "-";
+      dom.totalSupplyDisplay.textContent = state.tokenMeta.totalSupply === null
+        ? "-"
+        : formatAmount(state.tokenMeta.totalSupply);
+
+      if (!state.contractId) {
+        dom.overviewHint.innerHTML = "Chưa có contract ID. Hãy dán ID đã deploy trên Testnet để UI có thể đọc dữ liệu on-chain.";
+      } else if (!state.connectedWallet) {
+        dom.overviewHint.innerHTML = "Đã có contract ID nhưng chưa kết nối ví. Hãy kết nối Freighter trước khi refresh metadata.";
+      } else if (!state.tokenMeta.name && !state.tokenMeta.symbol && state.tokenMeta.totalSupply === null) {
+        dom.overviewHint.innerHTML = "Chưa đọc được metadata. Contract có thể chưa initialize hoặc contract ID chưa đúng.";
+      } else {
+        dom.overviewHint.innerHTML = `Metadata đã được đồng bộ từ contract <span class="mono">${shortAddress(state.contractId)}</span>.`;
+      }
+
+      renderWalletTable();
+    }
+
+    function renderActivityLog() {
+      if (!state.uiLog.length) {
+        dom.activityList.innerHTML = `
+          <div class="activity-item">
+            <div class="activity-meta">Chưa có hoạt động nào. Kết nối ví hoặc refresh metadata để bắt đầu.</div>
+          </div>
+        `;
+        return;
+      }
+
+      dom.activityList.innerHTML = state.uiLog.slice().reverse().map((entry) => `
+        <div class="activity-item">
+          <div class="activity-top">
+            <strong>${entry.title}</strong>
+            <span class="activity-kind ${entry.status === "error" ? "error" : ""}">${entry.kind}</span>
+          </div>
+          <div class="activity-meta">${entry.time}</div>
+          <div class="activity-meta" style="margin-top:8px">${entry.detail}</div>
+          ${entry.hash ? `<div class="activity-meta mono" style="margin-top:8px">${entry.hash}</div>` : ""}
+        </div>
+      `).join("");
+    }
+
+    function updateConnectedWalletUI() {
+      dom.transferFrom.value = state.connectedWallet || "";
+      dom.adminAddress.placeholder = state.connectedWallet || "Để trống để dùng ví đang kết nối";
+      dom.connectWalletBtn.textContent = state.connectedWallet
+        ? `Ví ${shortAddress(state.connectedWallet)}`
+        : "Kết nối Freighter";
+      dom.walletStatusDot.className = `status-dot ${state.connectedWallet ? "connected" : ""}`.trim();
+      dom.walletStatusText.textContent = state.connectedWallet
+        ? `${shortAddress(state.connectedWallet)} connected`
+        : "Disconnected";
+      renderWalletTable();
+    }
+
+    function saveContractIdFromInput() {
+      state.contractId = dom.contractId.value.trim();
+      persistContractId();
+      state.tokenMeta.admin = getAdminHint();
+      renderOverview();
+      return state.contractId;
+    }
+
+    function ensureFreighterApiAvailable() {
+      if (!freighterApi) {
+        throw new Error("Freighter API chưa được nạp trong trình duyệt. Hãy reload trang sau khi cài extension.");
+      }
+    }
+
+    async function freighterIsInstalled() {
+      ensureFreighterApiAvailable();
+      const result = await freighterApi.isConnected();
+
+      if (typeof result === "boolean") {
+        return result;
+      }
+
+      if (result?.error) {
+        throw new Error(normalizeError(result.error));
+      }
+
+      return Boolean(result?.isConnected);
+    }
+
+    async function freighterRequestAccess() {
+      ensureFreighterApiAvailable();
+
+      if (typeof freighterApi.requestAccess === "function") {
+        const accessResult = await freighterApi.requestAccess();
+        if (accessResult?.error) {
+          throw new Error(normalizeError(accessResult.error));
+        }
+        if (accessResult?.address) {
+          return accessResult.address;
+        }
+      }
+
+      if (typeof freighterApi.setAllowed === "function") {
+        const allowResult = await freighterApi.setAllowed();
+        if (allowResult?.error) {
+          throw new Error(normalizeError(allowResult.error));
+        }
+      }
+
+      const addressResult = await freighterApi.getAddress();
+      if (addressResult?.error) {
+        throw new Error(normalizeError(addressResult.error));
+      }
+      if (!addressResult?.address) {
+        throw new Error("Freighter chưa trả về địa chỉ ví sau khi cấp quyền.");
+      }
+      return addressResult.address;
+    }
+
+    function getServer() {
+      return new StellarSdk.SorobanRpc.Server(NETWORK.rpcUrl);
+    }
+
+    function getContract() {
+      if (!state.contractId) {
+        throw new Error("Chưa nhập Contract ID.");
+      }
+      return new StellarSdk.Contract(state.contractId);
+    }
+
+    function ensureWalletConnected() {
+      if (!state.connectedWallet) {
+        throw new Error("Hãy kết nối ví Freighter trước.");
+      }
+    }
+
+    function ensureContractConfigured() {
+      if (!state.contractId) {
+        throw new Error("Hãy nhập Contract ID trước.");
+      }
+    }
+
+    function toAddressScVal(address) {
+      return new StellarSdk.Address(address).toScVal();
+    }
+
+    function toStringScVal(value) {
+      return StellarSdk.nativeToScVal(value, { type: "string" });
+    }
+
+    function toI128ScVal(value) {
+      return StellarSdk.nativeToScVal(BigInt(value), { type: "i128" });
+    }
+
+    async function getSourceAccount() {
+      ensureWalletConnected();
+      const server = getServer();
+      return server.getAccount(state.connectedWallet);
+    }
+
+    async function simulateRead(method, args = []) {
+      ensureWalletConnected();
+      ensureContractConfigured();
+
+      const account = await getSourceAccount();
+      const contract = getContract();
+      const server = getServer();
+
+      const tx = new StellarSdk.TransactionBuilder(account, {
+        fee: StellarSdk.BASE_FEE,
+        networkPassphrase: NETWORK.passphrase,
+      })
+        .addOperation(contract.call(method, ...args))
+        .setTimeout(30)
+        .build();
+
+      const simulation = await server.simulateTransaction(tx);
+
+      if (simulation.error) {
+        throw new Error(simulation.error);
+      }
+
+      if (!simulation.result || !simulation.result.retval) {
+        throw new Error(`Không có dữ liệu trả về từ ${method}().`);
+      }
+
+      return StellarSdk.scValToNative(simulation.result.retval);
+    }
+
+    async function submitContractCall(method, args = [], userFacingTitle = method) {
+      ensureWalletConnected();
+      ensureContractConfigured();
+
+      const account = await getSourceAccount();
+      const contract = getContract();
+      const server = getServer();
+
+      const tx = new StellarSdk.TransactionBuilder(account, {
+        fee: StellarSdk.BASE_FEE,
+        networkPassphrase: NETWORK.passphrase,
+      })
+        .addOperation(contract.call(method, ...args))
+        .setTimeout(60)
+        .build();
+
+      const prepared = await server.prepareTransaction(tx);
+      const signedResult = await freighterApi.signTransaction(prepared.toXDR(), {
+        networkPassphrase: NETWORK.passphrase,
+        address: state.connectedWallet,
+      });
+
+      if (signedResult?.error) {
+        throw new Error(normalizeError(signedResult.error));
+      }
+
+      const signedTxXdr = typeof signedResult === "string" ? signedResult : signedResult.signedTxXdr;
+      if (!signedTxXdr) {
+        throw new Error("Freighter không trả về signedTxXdr.");
+      }
+
+      const signedTx = StellarSdk.TransactionBuilder.fromXDR(signedTxXdr, NETWORK.passphrase);
+      const sendResult = await server.sendTransaction(signedTx);
+      const hash = sendResult.hash || "";
+
+      setLatestTx("pending", `${userFacingTitle}: giao dịch đã được gửi, đang chờ xác nhận.`, hash);
+      pushLog(method.toUpperCase(), `${userFacingTitle} submitted`, `Tx đã được gửi lên testnet và đang chờ xác nhận.`, "success", hash);
+
+      if (sendResult.status && sendResult.status !== "PENDING" && sendResult.status !== "DUPLICATE") {
+        const sendMessage = sendResult.errorResultXdr || sendResult.status;
+        throw new Error(`Submit thất bại: ${sendMessage}`);
+      }
+
+      const finalized = await pollTransaction(hash);
+      return { hash, finalized };
+    }
+
+    async function pollTransaction(hash) {
+      const server = getServer();
+
+      for (let attempt = 0; attempt < 25; attempt += 1) {
+        await new Promise((resolve) => setTimeout(resolve, 1200));
+        const result = await server.getTransaction(hash);
+        if (result.status && result.status !== "NOT_FOUND") {
+          return result;
+        }
+      }
+
+      throw new Error("Quá thời gian chờ xác nhận transaction trên Testnet.");
+    }
+
+    async function refreshMetadata() {
+      ensureWalletConnected();
+      ensureContractConfigured();
+
+      setBusy(true);
+      clearAlert(dom.adminAlert);
+      clearAlert(dom.transferAlert);
+
+      try {
+        const [name, symbol, totalSupply, walletBalance] = await Promise.all([
+          simulateRead("name"),
+          simulateRead("symbol"),
+          simulateRead("total_supply"),
+          simulateRead("balance", [toAddressScVal(state.connectedWallet)]),
+        ]);
+
+        state.tokenMeta.name = String(name);
+        state.tokenMeta.symbol = String(symbol);
+        state.tokenMeta.totalSupply = totalSupply;
+        state.tokenMeta.walletBalance = walletBalance;
+        state.tokenMeta.admin = getAdminHint();
+
+        renderOverview();
+        pushLog("READ", "Metadata refreshed", `Đã đọc thành công name=${name}, symbol=${symbol}, totalSupply=${totalSupply}, balance=${walletBalance}.`);
+        setLatestTx("success", "Đã refresh metadata từ contract thành công.");
+      } catch (error) {
+        state.tokenMeta.name = "";
+        state.tokenMeta.symbol = "";
+        state.tokenMeta.totalSupply = null;
+        state.tokenMeta.walletBalance = null;
+        state.tokenMeta.admin = getAdminHint();
+        renderOverview();
+
+        const message = normalizeError(error);
+        if (message.toLowerCase().includes("missing value")) {
+          dom.overviewHint.innerHTML = "Contract có vẻ chưa initialize. Bạn có thể dùng form Admin để khởi tạo trước.";
+        }
+        pushLog("READ", "Metadata refresh failed", message, "error");
+        setLatestTx("error", `Refresh metadata thất bại: ${message}`);
+        throw error;
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function connectWallet() {
+      setBusy(true);
+      clearAlert(dom.adminAlert);
+      clearAlert(dom.transferAlert);
+
+      try {
+        const connected = await freighterIsInstalled();
+        if (!connected) {
+          throw new Error("Không tìm thấy Freighter. Hãy cài extension và chuyển sang Testnet.");
+        }
+
+        const address = await freighterRequestAccess();
+        if (!address) {
+          throw new Error("Freighter không trả về địa chỉ ví.");
+        }
+
+        state.connectedWallet = address;
+        updateConnectedWalletUI();
+        pushLog("WALLET", "Wallet connected", `Đã kết nối ví ${shortAddress(address)}.`);
+        setLatestTx("success", "Kết nối ví Freighter thành công.");
+
+        if (!dom.adminAddress.value.trim()) {
+          dom.adminAddress.value = address;
+        }
+
+        if (state.contractId) {
+          try {
+            await refreshMetadata();
+            pushLog("WALLET", "Auto refresh complete", "Đã tự động refresh metadata sau khi kết nối ví.");
+          } catch (refreshError) {
+            const refreshMessage = normalizeError(refreshError);
+            showAlert(dom.adminAlert, `Ví đã kết nối nhưng refresh metadata thất bại: ${refreshMessage}`, "error");
+          }
+        }
+      } catch (error) {
+        const message = normalizeError(error);
+        pushLog("WALLET", "Wallet connection failed", message, "error");
+        setLatestTx("error", message);
+        throw error;
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    function ensureAdminIntentMatchesWallet(adminAddress) {
+      ensureWalletConnected();
+      if (adminAddress !== state.connectedWallet) {
+        throw new Error("ABI hiện tại yêu cầu admin ký trực tiếp. Hãy dùng đúng ví admin đang kết nối.");
+      }
+    }
+
+    async function handleInitialize() {
+      clearAlert(dom.adminAlert);
+
+      try {
+        ensureContractConfigured();
+        ensureWalletConnected();
+
+        const adminAddress = (dom.adminAddress.value.trim() || state.connectedWallet).trim();
+        const tokenName = dom.tokenName.value.trim();
+        const tokenSymbol = dom.tokenSymbol.value.trim();
+
+        if (!tokenName || !tokenSymbol) {
+          throw new Error("Token name và token symbol là bắt buộc.");
+        }
+
+        ensureAdminIntentMatchesWallet(adminAddress);
+
+        setBusy(true);
+        const { hash, finalized } = await submitContractCall(
+          "initialize",
+          [
+            toAddressScVal(adminAddress),
+            toStringScVal(tokenName),
+            toStringScVal(tokenSymbol),
+          ],
+          "Initialize token"
+        );
+
+        if (finalized.status !== "SUCCESS") {
+          throw new Error(`Transaction initialize không thành công: ${finalized.status}`);
+        }
+
+        persistAdminHint(state.contractId, adminAddress);
+        state.tokenMeta.admin = adminAddress;
+        setLatestTx("success", "Initialize token thành công.", hash);
+        showAlert(dom.adminAlert, "Contract đã được initialize thành công. Đang refresh metadata...", "success");
+        pushLog("INIT", "Token initialized", `Admin ${shortAddress(adminAddress)} đã initialize token ${tokenName} (${tokenSymbol}).`, "success", hash);
+
+        await refreshMetadata();
+      } catch (error) {
+        const message = normalizeError(error);
+        showAlert(dom.adminAlert, message, "error");
+        pushLog("INIT", "Initialize failed", message, "error", state.latestTx.hash);
+        setLatestTx("error", `Initialize thất bại: ${message}`, state.latestTx.hash);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function handleMint() {
+      clearAlert(dom.adminAlert);
+
+      try {
+        ensureContractConfigured();
+        ensureWalletConnected();
+
+        const adminAddress = (dom.adminAddress.value.trim() || state.connectedWallet).trim();
+        const to = dom.mintTo.value.trim();
+        const amountRaw = dom.mintAmount.value.trim();
+
+        if (!to || !amountRaw) {
+          throw new Error("Nhập đầy đủ địa chỉ nhận và số lượng mint.");
+        }
+
+        const amount = BigInt(amountRaw);
+        if (amount <= 0n) {
+          throw new Error("Số lượng mint phải lớn hơn 0.");
+        }
+
+        ensureAdminIntentMatchesWallet(adminAddress);
+        state.tokenMeta.admin = getAdminHint() || adminAddress;
+
+        setBusy(true);
+        const { hash, finalized } = await submitContractCall(
+          "mint",
+          [toAddressScVal(to), toI128ScVal(amount)],
+          "Mint token"
+        );
+
+        if (finalized.status !== "SUCCESS") {
+          throw new Error(`Transaction mint không thành công: ${finalized.status}`);
+        }
+
+        persistAdminHint(state.contractId, adminAddress);
+        state.tokenMeta.admin = adminAddress;
+        setLatestTx("success", "Mint token thành công.", hash);
+        showAlert(dom.adminAlert, `Mint thành công ${formatAmount(amount)} token cho ${shortAddress(to)}.`, "success");
+        pushLog("MINT", "Mint successful", `Admin ${shortAddress(adminAddress)} đã mint ${formatAmount(amount)} token cho ${shortAddress(to)}.`, "success", hash);
+
+        await refreshMetadata();
+      } catch (error) {
+        const message = normalizeError(error);
+        showAlert(dom.adminAlert, message, "error");
+        pushLog("MINT", "Mint failed", message, "error", state.latestTx.hash);
+        setLatestTx("error", `Mint thất bại: ${message}`, state.latestTx.hash);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function checkBalanceBeforeTransfer() {
+      clearAlert(dom.transferAlert);
+
+      try {
+        ensureWalletConnected();
+        ensureContractConfigured();
+
+        const amountRaw = dom.transferAmount.value.trim();
+        if (!amountRaw) {
+          throw new Error("Nhập số lượng cần chuyển trước khi kiểm tra số dư.");
+        }
+
+        const amount = BigInt(amountRaw);
+        if (amount <= 0n) {
+          throw new Error("Số lượng cần chuyển phải lớn hơn 0.");
+        }
+
+        setBusy(true);
+        const currentBalance = await simulateRead("balance", [toAddressScVal(state.connectedWallet)]);
+        state.tokenMeta.walletBalance = currentBalance;
+        renderWalletTable();
+
+        if (BigInt(currentBalance) < amount) {
+          showAlert(dom.transferAlert, `Số dư không đủ. Ví hiện có ${formatAmount(currentBalance)} ${state.tokenMeta.symbol || "token"}.`, "error");
+          pushLog("CHECK", "Balance check failed", `Balance hiện tại ${currentBalance}, thấp hơn amount ${amount}.`, "error");
+          setLatestTx("error", "Số dư không đủ để transfer.");
+          return false;
+        }
+
+        showAlert(dom.transferAlert, `Số dư hợp lệ. Ví đang có ${formatAmount(currentBalance)} ${state.tokenMeta.symbol || "token"}.`, "success");
+        pushLog("CHECK", "Balance check passed", `Balance hiện tại ${currentBalance}, đủ để chuyển ${amount}.`);
+        setLatestTx("success", "Kiểm tra số dư thành công.");
+        return true;
+      } catch (error) {
+        const message = normalizeError(error);
+        showAlert(dom.transferAlert, message, "error");
+        pushLog("CHECK", "Balance check failed", message, "error");
+        setLatestTx("error", `Kiểm tra số dư thất bại: ${message}`);
+        return false;
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function handleTransfer() {
+      clearAlert(dom.transferAlert);
+
+      try {
+        ensureWalletConnected();
+        ensureContractConfigured();
+
+        const to = dom.transferTo.value.trim();
+        const amountRaw = dom.transferAmount.value.trim();
+
+        if (!to || !amountRaw) {
+          throw new Error("Nhập địa chỉ nhận và số lượng cần chuyển.");
+        }
+
+        const amount = BigInt(amountRaw);
+        if (amount <= 0n) {
+          throw new Error("Số lượng chuyển phải lớn hơn 0.");
+        }
+
+        const balanceOkay = await checkBalanceBeforeTransfer();
+        if (!balanceOkay) return;
+
+        setBusy(true);
+        const { hash, finalized } = await submitContractCall(
+          "transfer",
+          [toAddressScVal(state.connectedWallet), toAddressScVal(to), toI128ScVal(amount)],
+          "Transfer token"
+        );
+
+        if (finalized.status !== "SUCCESS") {
+          throw new Error(`Transaction transfer không thành công: ${finalized.status}`);
+        }
+
+        setLatestTx("success", "Transfer token thành công.", hash);
+        showAlert(dom.transferAlert, `Đã chuyển ${formatAmount(amount)} ${state.tokenMeta.symbol || "token"} đến ${shortAddress(to)}.`, "success");
+        pushLog("TRANSFER", "Transfer successful", `${shortAddress(state.connectedWallet)} đã chuyển ${formatAmount(amount)} ${state.tokenMeta.symbol || "token"} cho ${shortAddress(to)}.`, "success", hash);
+
+        await refreshMetadata();
+      } catch (error) {
+        const message = normalizeError(error);
+        showAlert(dom.transferAlert, message, "error");
+        pushLog("TRANSFER", "Transfer failed", message, "error", state.latestTx.hash);
+        setLatestTx("error", `Transfer thất bại: ${message}`, state.latestTx.hash);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    dom.connectWalletBtn.addEventListener("click", async () => {
+      try {
+        await connectWallet();
+      } catch {
+        // State is already reflected in the UI helpers.
+      }
+    });
+
+    dom.saveConfigBtn.addEventListener("click", () => {
+      const contractId = saveContractIdFromInput();
+      pushLog("CONFIG", "Configuration saved", contractId ? `Đã lưu contract ID ${shortAddress(contractId)}.` : "Đã xóa contract ID.");
+      setLatestTx("success", contractId ? "Đã lưu cấu hình contract." : "Đã xóa cấu hình contract.");
+    });
+
+    dom.refreshOverviewBtn.addEventListener("click", async () => {
+      try {
+        saveContractIdFromInput();
+        await refreshMetadata();
+      } catch (error) {
+        const message = normalizeError(error);
+        showAlert(dom.adminAlert, message, "error");
+      }
+    });
+
+    dom.initializeBtn.addEventListener("click", async () => {
+      saveContractIdFromInput();
+      await handleInitialize();
+    });
+
+    dom.mintBtn.addEventListener("click", async () => {
+      saveContractIdFromInput();
+      await handleMint();
+    });
+
+    dom.checkBalanceBtn.addEventListener("click", async () => {
+      saveContractIdFromInput();
+      await checkBalanceBeforeTransfer();
+    });
+
+    dom.transferBtn.addEventListener("click", async () => {
+      saveContractIdFromInput();
+      await handleTransfer();
+    });
+
+    renderOverview();
+    renderLatestTx();
+    renderActivityLog();
+    updateConnectedWalletUI();
+    pushLog("READY", "UI loaded", "Frontend Campus Coin đã sẵn sàng. Hãy kết nối Freighter và nhập contract ID để bắt đầu.");
+  </script>
+</body>
+</html>
